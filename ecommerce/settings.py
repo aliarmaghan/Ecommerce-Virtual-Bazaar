@@ -40,7 +40,8 @@ INSTALLED_APPS = [
 ]
 
 EXTERNAL_APP = [
-    'ecommerceapp'
+    'ecommerceapp',
+    'authBazaar',
 ]
 
 INSTALLED_APPS += EXTERNAL_APP
