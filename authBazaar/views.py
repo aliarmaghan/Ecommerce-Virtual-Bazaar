@@ -10,14 +10,13 @@ def signup(request):
         password = request.POST['pass1']
         confirm_password = request.POST['pass2']
         if password != confirm_password:
-            # messages.info( "Password don't match")
-            return HttpResponse("Password don't match")
-            #return redirect(request, 'auth/signup.html')
+            messages.warning(request, "Password not match")
+            return render(request, 'signup.html')
         
         try:
-            if User.objects.get(username = email):
-                return HttpResponse("Email Already exist")
-                # return render(request, 'auth/signup.html')
+            if User.objects.get(email = email):
+                messages.info(request, "Email already exist")
+                return render(request, 'signup.html')
         except Exception as e:
             print(e)
 
