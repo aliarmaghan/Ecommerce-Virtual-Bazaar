@@ -123,8 +123,8 @@ USE_TZ = True
 
 # sending emails
 EMAIL_HOST = 'smtpout.secureserver.net'
-EMAIL_HOST_USER = 'your email'
-EMAIL_HOST_PASSWORD = 'your email password'
+EMAIL_HOST_USER = 'Your Email'
+EMAIL_HOST_PASSWORD = 'Your Email Password'
 EMAIL_PORT = 578
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'

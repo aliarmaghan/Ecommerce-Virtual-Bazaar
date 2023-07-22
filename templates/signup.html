@@ -15,7 +15,7 @@
     {% endif %}
 
     <h1 class="text-dark-emphasis">Signup</h1>
-    <form action='/auth/signup/' method="post">
+    <form action='/auth/signup/' method="post" enctype="multipart/form-data">
       {% csrf_token %}
       <label for='fullname'>Full Name</label>
       <div class="form-control">
