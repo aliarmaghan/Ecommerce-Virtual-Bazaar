@@ -2,12 +2,15 @@ from django.shortcuts import render,redirect,HttpResponse
 from django.contrib import messages
 from django.views.generic import View
 from django.contrib.auth.models import User
+# email send
 from django.template.loader import render_to_string
 from django.utils.http import urlsafe_base64_encode,urlsafe_base64_decode
-from .utils import generate_token
+from .utils import generate_token,TokenGenerator
 from django.utils.encoding import force_bytes,force_str,DjangoUnicodeDecodeError 
 from django.core.mail import EmailMessage
 from django.conf import settings
+# login Authenticate 
+from django.contrib.auth import authenticate,login,logout
 
 # Create your views here.
 def signup(request):
@@ -35,15 +38,15 @@ def signup(request):
             'user' : user,
             'domain' : '127.0.0.1:8000',
             'uid': urlsafe_base64_encode(force_bytes(user.pk)),
-            'token' : generate_token.make_token(user)
+            'token' : generate_token.make_token(user),
 
         })        
         email_message = EmailMessage(
             email_subject,message,settings.EMAIL_HOST_USER,[email],
         )
         email_message.send()
-        message.success(request, "Activate your Acount by clicking on link sent to your email")
-        return redirect('auth/login/')
+        messages.success(request, "Activate your Acount by clicking on link sent to your email")
+        return redirect('/auth/login/')
     return render(request, "signup.html")
 
 class ActivateAccountView(View):
@@ -58,13 +61,31 @@ class ActivateAccountView(View):
             user.is_active=True
             user.save()
             messages.info(request, "Account Activated Successfully") 
-            return redirect('/auth/login')
+            return redirect('/auth/login/')
         return render(request, 'activate fail.html')
 
+
+
+
 def handlelogin(request):
-    return render(request,"authentication/login.html")
+    if request.method == "POST":
+        username = request.POST['email']
+        userpassword = request.POST['pass1']
+        myuser =authenticate(username = username, password = userpassword)
+
+        if myuser is not None:
+            login(request,myuser)
+            # messages.success(request,"Login Success")
+            return redirect('/')
+        else:
+            messages.error(request, "Invalid Credentials")
+            return redirect('/auth/login')
+
+    return render(request,'login.html')
 
 
 
 def handlelogout(request):
+    logout(request)
+    messages.info(request,"Logout Success")
     return redirect('/auth/login')

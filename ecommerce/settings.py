@@ -123,12 +123,11 @@ USE_TZ = True
 
 # sending emails
 EMAIL_HOST = 'smtpout.secureserver.net'
-EMAIL_HOST_USER = 'Your Email'
-EMAIL_HOST_PASSWORD = 'Your Email Password'
-EMAIL_PORT = 578
+EMAIL_HOST_USER = 'maarmaghan@myamu.ac.in'
+EMAIL_HOST_PASSWORD = '7677197676'
+EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
