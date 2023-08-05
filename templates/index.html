@@ -15,7 +15,7 @@
 
 {% block body %}
 {% load static %}
-<!-- ======= Portfolio Section ======= -->
+<!-- ======= Product Section ======= -->
 <section id="portfolio" class="portfolio">
   <div class="container">
 
@@ -31,12 +31,12 @@
       <div class="row">
         {% for i in product %}
           <div class="col-md-3 mt-3">
-            <div class="card" style="width: 18rem;">
-              <img src="/media/{{i.image}}" class="card-img-top" alt="not found"/>
+            <div class="card"  >
+              <img src="/media/{{i.image}}" class="card-img-top" height="200px" width="150px"alt="not found"/>
             </div>
             <div class="card-body">
-              <h5 class="card-title" id="namepr{{i.id}}">{{i.product_name}}</h5>
-              <p class="card-text">{{i.desc|slice:"0:5"}}...</p>
+              <h5 class="card-title mt-2" id="namepr{{i.id}}">{{i.product_name}}</h5>
+              <p class="card-text">{{i.desc|slice:"0:25"}}...</p>
               <h6 class="card-title">Price:<span id="pricepr{{i.id}}">{{i.price}}</span></h6>
               <span id="divpr{{i.id}}" class="divpr">
                 <button id="pr{{i.id}}" class="btn btn-danger btn-sm mt-0">AddToCart</button>
@@ -51,6 +51,6 @@
     {% endfor %}
   </div>
 </section>
-<!-- End Portfolio Section -->
+<!-- End Product Section -->
 
 {% endblock body %}
