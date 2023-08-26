@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}
+Check Out
+{% endblock title %}
+
+{% block content %}
+  <!-- ======= Hero Section ======= -->
+<section id="hero">
+  <div class="hero-container">
+    <h3>Welcome to <strong>Virtual Bazaar</strong></h3>
+    {% comment %} <h1>We're Selling Products</h1>
+    <h2>When in doubt, visit Virtual Bazaar..</h2>
+    <a href="" class="btn-get-started scrollto">Shop Now</a> {% endcomment %}
+  </div> 
+</section>
+<!-- End Hero -->
+{% endblock content %}
+
+{% block body %}
+{% load static %}
+<!-- ======= Product Section ======= -->
+<section id="portfolio" class="portfolio">
+  <div class="container">
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{message.tags}} alert-dismissible fade show" role="alert">
+        <strong>{{ message }}</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="section-title">
+        <h2> Welcome to Shop</h2>
+        <h3>Checkout Page</h3>
+    </div>
+
+    <div class="container">
+        <div class="col my-4">
+            <h2>Step 1 - My Awesome Cart Express Checkout - Review Your Cart Items</h2>
+            <div class="my-4">
+                <ul class="list-group" id="items"></ul>
+                <nav aria-label="breadcrumb">
+                  <ol class="breadcrumb mt-3">
+                  <li class="breadcrumb-item active" aria-current="page">Your Cart Total Is<b>Rs. <span id="totalprice"> </span><span id="amount"> </span></b>. Enter your details below & place your order. Thanks for using Virtual Bazaar</li>
+                  </ol>
+                </nav>
+            </div>
+        </div>    
+    </div>
+  </div>
+  
+</section>
+
+<script>
+  if(localStorage.getItem('cart') == null){
+    var cart = {};
+  } else {
+    cart = JSON.parse(localStorage.getItem('cart'));
+  }
+  console.log(cart);
+  var sum = 0; 
+  var totalPrice = 0;
+  if($.isEmptyObject(cart)) {
+    // if Object is empty
+    mystr = `<p> Your cart is empty please add some items to your cart before checking-out!!</p>`
+    $('#items').append(mystr); 
+  } else {
+    
+    for (item in cart) {
+      let name = cart[items][1];
+      let qty = cart[items][0];
+      let itemPrice = cart[items][2];
+      sum = sum + qty;
+      totalPrice += qty * itemPrice
+
+      mystr = `<li class="list-group-item d-flex justify-content-between align-items-center"> 
+        ${name}
+        <div><b> Price : ${itemPrice}</b></div>
+        <span class="badge badge-primary badge-pill">${qty}</span>
+      </li>`
+      $('#items').append(mystr);
+    }
+    document.getElementById('totalprice').innerHTML = totalPrice;
+  }
+  document.getElementById('totalprice').innerHTML = totalPrice;
+  
+</script>
+{% endblock body %}
+
