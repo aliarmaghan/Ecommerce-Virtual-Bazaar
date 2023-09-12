@@ -2,10 +2,13 @@ from django.shortcuts import render,redirect
 from ecommerceapp.models import Contact,Product,OrderUpdate,Orders
 from django.contrib import messages
 from math import ceil
-
-
-
-
+#payment
+from ecommerceapp import keys
+from django.conf import settings
+MERCHANT_KEY=keys.MK
+import json
+from django.views.decorators.csrf import csrf_exempt
+from PayTm import Checksum
 # Create your views here.
 def index(request):
     allProds =[]
@@ -35,9 +38,12 @@ def about(request):
 
 
 def checkout(request):
+    
     if not request.user.is_authenticated:
         messages.warning(request,"Login and Try Again")
         return redirect('/auth/login')
+    
+    # return render(request, "checkout.html")
     
     if request.method == "POST":
         items_json = request.POST.get('itemsJson','')
@@ -60,11 +66,63 @@ def checkout(request):
 
 
 # Payment Integration
+        id = Order.order_id
+        oid=str(id)+"VB"
+        param_dict = {
 
-    # id = Order.order_id
+            'MID':keys.MID,
+            'ORDER_ID': oid,
+            'TXN_AMOUNT': str(amount),
+            'CUST_ID': email,
+            'INDUSTRY_TYPE_ID': 'Retail',
+            'WEBSITE': 'WEBSTAGING',
+            'CHANNEL_ID': 'WEB',
+            'CALLBACK_URL': 'http://127.0.0.1:8000/handlerequest/',
+
+        }
+        param_dict['CHECKSUMHASH'] = Checksum.generate_checksum(param_dict, MERCHANT_KEY)
+        return render(request, 'paytm.html', {'param_dict': param_dict})
+
+    return render(request, 'checkout.html')
+
+
+@csrf_exempt
+def handlerequest(request):
+    # paytm will send you post request here
+    form = request.POST
+    response_dict = {}
+    for i in form.keys():
+        response_dict[i] = form[i]
+        if i == 'CHECKSUMHASH':
+            checksum = form[i]
+
+    verify = Checksum.verify_checksum(response_dict, MERCHANT_KEY, checksum)
+    if verify:
+        if response_dict['RESPCODE'] == '01':
+            print('order successful')
+            a=response_dict['ORDERID']
+            b=response_dict['TXNAMOUNT']
+            rid=a.replace("VirtualBazaar","")
+           
+            print(rid)
+            filter2= Orders.objects.filter(order_id=rid)
+            print(filter2)
+            print(a,b)
+            for post1 in filter2:
+
+                post1.oid=a
+                post1.amountpaid=b
+                post1.paymentstatus="PAID"
+                post1.save()
+            print("run agede function")
+        else:
+            print('order was not successful because' + response_dict['RESPMSG'])
+    return render(request, 'paymentstatus.html', {'response': response_dict})
+
+    
 
 
 
 
     
-    #     return render(request, "checkout.html")
+    
