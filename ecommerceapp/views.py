@@ -48,7 +48,7 @@ def checkout(request):
     if request.method == "POST":
         items_json = request.POST.get('itemsJson','')
         name = request.POST.get('name','')
-        amount = request.POST.get('amt','')
+        amount = request.POST.get('amt')
         email = request.POST.get('email','')
         address1 = request.POST.get('address1','')
         address2 = request.POST.get('address2','')
@@ -95,6 +95,7 @@ def handlerequest(request):
         response_dict[i] = form[i]
         if i == 'CHECKSUMHASH':
             checksum = form[i]
+            print(checksum)
 
     verify = Checksum.verify_checksum(response_dict, MERCHANT_KEY, checksum)
     if verify:
@@ -102,7 +103,7 @@ def handlerequest(request):
             print('order successful')
             a=response_dict['ORDERID']
             b=response_dict['TXNAMOUNT']
-            rid=a.replace("VirtualBazaar","")
+            rid=a.replace("VB","")
            
             print(rid)
             filter2= Orders.objects.filter(order_id=rid)
@@ -121,8 +122,5 @@ def handlerequest(request):
 
     
 
-
-
-
-    
-    
+def profile(request):
+    return render (request,'profile.html')

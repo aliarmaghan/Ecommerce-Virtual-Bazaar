@@ -138,6 +138,19 @@ Checkout
     document.getElementById('totalprice').innerHTML = totalPrice;
   }
   document.getElementById('totalprice').innerHTML = totalPrice;
+
+  $('#itemsJson').val(JSON.stringify(cart));
+
+
+
+{% if thank %}
+alert('Thanks for ordering with us. Your order is is {{id}}. Use it to track your order using our order tracker');
+localStorage.clear();
+document.location = "/";
+{% endif %}
+
+var test = `${totalPrice}`;
+document.getElementById("amt").value = test;
   
 </script>
 {% endblock body %}
